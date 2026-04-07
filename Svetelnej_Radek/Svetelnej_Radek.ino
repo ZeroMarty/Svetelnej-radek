@@ -1,13 +1,17 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-//#define CLK
-//#define CS
-//#define SPI_DELAY 20
-
+#define DIN 0x01 //PORTB0
+#define CS 0x02 //PORTB1
+#define CLK 0x04 // PORTB2
+//#define DELAY
 void setup() {
-  // put your setup code here, to run once:
+  DDRB = 0b11111111;
+  PORTB = 0b00000111;
+}
 
+void spi_init() {
+  
 }
 
 int main() {
