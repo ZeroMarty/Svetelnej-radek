@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 //MAX7219
+//SPI končí až kdyź končí, Ovládej v tomto pořadí: Shutdown -> Decode -> Scan limit -> Intenzita -> Display test
 #define DIN 0x01 //PORTB0
 #define CS 0x02 //PORTB1
 #define CLK 0x04 // PORTB2
@@ -44,7 +45,7 @@ void spi_pis(uint16_t data) {
     _delay_us(SPI_DELAY);
     PORTB &= ~(CLK);
     _delay_us(SPI_DELAY);
-    data << 1;
+    data = data << 1;
   }
 }
 
