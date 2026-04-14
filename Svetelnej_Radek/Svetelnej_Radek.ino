@@ -24,31 +24,34 @@ void prevodbinar() {
 
 }
 
-void spi_pis(uint16_t data [] ) {
-  for(int i = 0; i < 16; i++) {
-    if((byte)(data & (1 << i)) == 1) {
-      PORTB |= DIN;
+void spi_pis(uint16_t data) {
+  int i = 0;
+  for( i = 0; i < 16; i++) {
+    if(data & 0x8000 == 0) {
+      PORTB &= ~(DIN);
       _delay_us(SPI_DELAY);
     }
     else {
-      PORTB &= ~(DIN);
+      PORTB |= DIN;
       _delay_us(SPI_DELAY);
     }
     PORTB |= CLK;
     _delay_us(SPI_DELAY);
-    PORTB &= ~(DIN);
-    _delay_us(SPI_DELAY);
     PORTB &= ~(CLK);
     _delay_us(SPI_DELAY);
+    data << 1;
   }
 }
 
 void vypln() {
-
+  uint16_t data = {0xF1F0};
+  spi_start();
+  spi_pis(data);
+  spi_stop();
 }
 
 void intenzita() {
-  uint16_t data [1] = {0xFAFF};
+  uint16_t data = 0xFAFF;
   spi_start();
   spi_pis(data);
   spi_stop();
@@ -59,9 +62,11 @@ void zobrazeni (int data, bool konec) { //table 6 v datasheetu
 }
 
 int main() {
+  setup();
+  intenzita();
   while(1) {
-    setup();
-    intenzita();
+    //
+    
     
     
   }
