@@ -36,16 +36,34 @@ void spi_pis(uint16_t data) {
     }
     PORTB |= CLK;
     _delay_us(SPI_DELAY);
-    PORTB &= ~(DIN);
-    _delay_us(SPI_DELAY);
     PORTB &= ~(CLK);
     _delay_us(SPI_DELAY);
     data << 1;
   }
 }
 
+void scan() {
+  uint16_t data = 0xFB07;
+  spi_start();
+  spi_pis(data);
+  spi_stop();
+}
+
 void test() {
-  uint16_t data = {0xF1F0};
+  uint16_t data = 0xF807;
+  spi_start();
+  spi_pis(data);
+  spi_stop();
+}
+
+void spi_vypni() {
+  uint16_t data = 0xFCF0;
+  spi_start();
+  spi_pis(data);
+  spi_stop();
+}
+void spi_zapni() {
+  uint16_t data = 0xFCF1;
   spi_start();
   spi_pis(data);
   spi_stop();
@@ -58,15 +76,30 @@ void intenzita() {
   spi_stop();
 }
 
+void decode() {
+  uint16_t data = 0xF900;
+  spi_start();
+  spi_pis(data);
+  spi_stop();
+}
+void setup_spi() {
+  spi_vypni();
+  spi_zapni();
+  scan();
+  decode();
+  intenzita();
+}
+
 void zobrazeni (int data, bool konec) { //table 6 v datasheetu
   
 }
 
 int main() {
   setup();
-  intenzita();
+  setup_spi();
+  test();
   while(1) {
-   test();
+   
   }
   return 32;
 }
