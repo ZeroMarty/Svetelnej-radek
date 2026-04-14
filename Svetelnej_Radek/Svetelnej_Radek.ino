@@ -1,7 +1,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 //MAX7219
-//Předělej tak aby spi_pis přebíralo pole v binární podobě
 #define DIN 0x01 //PORTB0
 #define CS 0x02 //PORTB1
 #define CLK 0x04 // PORTB2
