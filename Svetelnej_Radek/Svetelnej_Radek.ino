@@ -10,6 +10,12 @@ void setup() {
   PORTB = 0b00000010;
 }
 
+void spi_kom (uint16_t data) {
+  spi_start();
+  spi_pis(data);
+  spi_stop();
+}
+
 void spi_start() {
   PORTB &= ~(CS);
   _delay_us(SPI_DELAY);
@@ -44,55 +50,39 @@ void spi_pis(uint16_t data) {
 
 void scan() {
   uint16_t data = 0xFB07;
-  spi_start();
-  spi_pis(data);
-  spi_stop();
+  spi_kom(data);
 }
 
 void test() {
   uint16_t data = 0xF301;
-  spi_start();
-  spi_pis(data);
-  spi_stop();
+  spi_kom(data);
   data = 0xf400;
-  spi_start();
-  spi_pis(data);
-  spi_stop();
+  spi_kom(data);
 }
 
 void spi_vypni() {
   uint16_t data = 0xFCF0;
-  spi_start();
-  spi_pis(data);
-  spi_stop();
+  spi_kom(data);
 }
 
 void spi_zapni() {
   uint16_t data = 0xFCF1;
-  spi_start();
-  spi_pis(data);
-  spi_stop();
+  spi_kom(data);
 }
 
 void display_test() {
   uint16_t data = 0xFFF0;
-  spi_start();
-  spi_pis(data);
-  spi_stop();
+  spi_kom(data);
 }
 
 void intenzita() {
   uint16_t data = 0xFAFF;
-  spi_start();
-  spi_pis(data);
-  spi_stop();
+  spi_kom(data);
 }
 
 void decode() {
   uint16_t data = 0xF9ff;
-  spi_start();
-  spi_pis(data);
-  spi_stop();
+  spi_kom(data);
 }
 void setup_spi() {
   spi_vypni();
