@@ -37,13 +37,15 @@ void spi_pis(uint16_t data) {
     }
     PORTB |= CLK;
     _delay_us(SPI_DELAY);
+    PORTB &= ~(DIN);
+    _delay_us(SPI_DELAY);
     PORTB &= ~(CLK);
     _delay_us(SPI_DELAY);
     data << 1;
   }
 }
 
-void vypln() {
+void test() {
   uint16_t data = {0xF1F0};
   spi_start();
   spi_pis(data);
@@ -65,10 +67,7 @@ int main() {
   setup();
   intenzita();
   while(1) {
-    //
-    
-    
-    
+   test();
   }
   return 32;
 }
