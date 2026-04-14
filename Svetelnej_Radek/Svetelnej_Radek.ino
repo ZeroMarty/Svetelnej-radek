@@ -4,7 +4,7 @@
 #define DIN 0x01 //PORTB0
 #define CS 0x02 //PORTB1
 #define CLK 0x04 // PORTB2
-#define SPI_DELAY 20
+#define SPI_DELAY 50
 void setup() {
   DDRB = 0b11111111;
   PORTB = 0b00000010;
@@ -49,14 +49,26 @@ void spi_pis(uint16_t data) {
 }
 
 void scan() {
-  uint16_t data = 0xFB07;
+  uint16_t data = 0xFB00;
   spi_kom(data);
 }
 
 void test() {
-  uint16_t data = 0xF301;
+  uint16_t data = 0xF101;
   spi_kom(data);
-  data = 0xf400;
+  data = 0xF200;
+  spi_kom(data);
+  data = 0xF300;
+  spi_kom(data);
+  data = 0xF400;
+  spi_kom(data);
+  data = 0xF500;
+  spi_kom(data);
+  data = 0xF600;
+  spi_kom(data);
+  data = 0xF700;
+  spi_kom(data);
+  data = 0xF800;
   spi_kom(data);
 }
 
@@ -87,8 +99,8 @@ void decode() {
 void setup_spi() {
   spi_vypni();
   spi_zapni();
-  scan();
-  decode();
+  //scan();
+  //decode();
   intenzita();
 }
 
@@ -98,11 +110,10 @@ void zobrazeni (int data, bool konec) { //table 6 v datasheetu
 
 int main() {
   setup();
-  //setup_spi();
-  spi_vypni();
+  setup_spi();  
   while(1) {
-   /*test();
-   _delay_ms(200);
+   test();
+   /*_delay_ms(200);
    display_test();
    _delay_ms(200);*/
   }
