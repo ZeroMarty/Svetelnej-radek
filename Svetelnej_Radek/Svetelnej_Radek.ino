@@ -7,7 +7,7 @@
 #define SPI_DELAY 20
 void setup() {
   DDRB = 0b11111111;
-  PORTB = 0b00000111;
+  PORTB = 0b00000010;
 }
 
 void spi_start() {
@@ -18,7 +18,7 @@ void spi_stop() {
   PORTB |= CS;
   _delay_us(SPI_DELAY);
 }
-
+// start stop funguje
 void prevodbinar() {
 
 }
@@ -50,7 +50,11 @@ void scan() {
 }
 
 void test() {
-  uint16_t data = 0xF807;
+  uint16_t data = 0xF301;
+  spi_start();
+  spi_pis(data);
+  spi_stop();
+  data = 0xf400;
   spi_start();
   spi_pis(data);
   spi_stop();
@@ -62,8 +66,16 @@ void spi_vypni() {
   spi_pis(data);
   spi_stop();
 }
+
 void spi_zapni() {
   uint16_t data = 0xFCF1;
+  spi_start();
+  spi_pis(data);
+  spi_stop();
+}
+
+void display_test() {
+  uint16_t data = 0xFFF0;
   spi_start();
   spi_pis(data);
   spi_stop();
@@ -77,7 +89,7 @@ void intenzita() {
 }
 
 void decode() {
-  uint16_t data = 0xF900;
+  uint16_t data = 0xF9ff;
   spi_start();
   spi_pis(data);
   spi_stop();
@@ -96,10 +108,13 @@ void zobrazeni (int data, bool konec) { //table 6 v datasheetu
 
 int main() {
   setup();
-  setup_spi();
-  test();
+  //setup_spi();
+  spi_vypni();
   while(1) {
-   
+   /*test();
+   _delay_ms(200);
+   display_test();
+   _delay_ms(200);*/
   }
   return 32;
 }
