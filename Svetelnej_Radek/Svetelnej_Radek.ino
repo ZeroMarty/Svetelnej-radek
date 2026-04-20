@@ -11,12 +11,6 @@ void setup() {
   PORTB = 0b00000010;
 }
 
-void spi_kom (uint16_t data) {
-  spi_start();
-  spi_pis(data);
-  spi_stop();
-}
-
 void spi_start() {
   PORTB &= ~(CS);
   _delay_us(SPI_DELAY);
@@ -50,52 +44,38 @@ void spi_pis(uint16_t data) {
 }
 
 void scan() {
-  uint16_t data = 0xFB00;
-  spi_kom(data);
+  spi_pis(0xFB00);
 }
 
 void test() {
-  uint16_t data = 0xF101;
-  spi_kom(data);
-  data = 0xF200;
-  spi_kom(data);
-  data = 0xF300;
-  spi_kom(data);
-  data = 0xF400;
-  spi_kom(data);
-  data = 0xF500;
-  spi_kom(data);
-  data = 0xF600;
-  spi_kom(data);
-  data = 0xF700;
-  spi_kom(data);
-  data = 0xF800;
-  spi_kom(data);
+  spi_pis(0xF101);
+  spi_pis(0xF200);
+  spi_pis(0xF300);
+  spi_pis(0xF400);
+  spi_pis(0xF500);
+  spi_pis(0xF600);
+  spi_pis(0xF700);
+  spi_pis(0xF800);
 }
 
 void spi_vypni() {
-  uint16_t data = 0xFCF0;
-  spi_kom(data);
+  spi_pis(0xFCF0);
 }
 
 void spi_zapni() {
-  uint16_t data = 0xFCF1;
-  spi_kom(data);
+  spi_pis(0xFCF1);
 }
 
 void display_test() {
-  uint16_t data = 0xFFF0;
-  spi_kom(data);
+  spi_pis(0xF00);
 }
 
 void intenzita() {
-  uint16_t data = 0xFAFF;
-  spi_kom(data);
+  spi_pis(0xFAFF);
 }
 
 void decode() {
-  uint16_t data = 0xF9ff;
-  spi_kom(data);
+  spi_pis(0xF9FF);
 }
 void setup_spi() {
   spi_vypni();
@@ -111,12 +91,12 @@ void zobrazeni (int data, bool konec) { //table 6 v datasheetu
 
 int main() {
   setup();
+  spi_start();
   setup_spi();  
   while(1) {
    test();
-   /*_delay_ms(200);
-   display_test();
-   _delay_ms(200);*/
+   
+   spi_stop();
   }
   return 32;
 }
