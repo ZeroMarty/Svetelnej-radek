@@ -19,15 +19,11 @@ void spi_stop() {
   PORTB |= CS;
   _delay_us(SPI_DELAY);
 }
-// start stop funguje
-void prevodbinar() {
-
-}
 
 void spi_pis(uint16_t data) {
   int i = 0;
   for( i = 0; i < 16; i++) {
-    if(data & 0x8000 == 0) {
+    if((data & 0x8000) == 0) {
       PORTB &= ~(DIN);
       _delay_us(SPI_DELAY);
     }
@@ -66,10 +62,6 @@ void spi_zapni() {
   spi_pis(0xFCF1);
 }
 
-void display_test() {
-  spi_pis(0xF00);
-}
-
 void intenzita() {
   spi_pis(0xFAFF);
 }
@@ -77,12 +69,17 @@ void intenzita() {
 void decode() {
   spi_pis(0xF9FF);
 }
+
+void display_test() {
+  spi_pis(0xFFF0);
+}
 void setup_spi() {
   spi_vypni();
   spi_zapni();
-  //scan();
-  //decode();
+  decode();
+  scan();
   intenzita();
+  display_test();
 }
 
 void zobrazeni (int data, bool konec) { //table 6 v datasheetu
