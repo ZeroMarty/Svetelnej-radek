@@ -17,7 +17,7 @@ uint8_t mesic = 4;
 uint16_t rok = 2026;
 uint8_t denvtydnu = 2;
 
-uint8_t display[POCET_SLOUPCU];
+uint8_t display[pocet_sloupcu]; //framebuffer displaye
 
 void setup() {
   DDRB = 0b11111111;
@@ -41,7 +41,13 @@ void pis_vsem(uint8_t addr, uint8_t data) {
   spi_stop();
 }
 
-
+uint8_t pole (char c) { //překlad znaků na index v poli v fontu
+  if(c>='0' && c<='9') return c-'0';
+  if(c == ':') return 10;
+  if(c=='.') return 11;
+  if(c=='-') return 12;
+  return 13;
+}
 
 void spi_pis(uint8_t addr, uint8_t data) {
   for(int i = 0; i < 8; i++) {
@@ -153,8 +159,42 @@ void smaz() {
   }
 }
 
+void obnova() {
+  for (uint8_t sloupec = 1; sloupec <= 8; sloupec++) { //kvůli noop začínám v 1
+    spi_start();
+    for(int i = 11; i >= 0; i--) { //odzadu
+      spi_pis(sloupec, display[(i*8) + (sloupec-1)])
+    }
+    spi_stop();
+  }
+}
+
+void vykresli(char c; int start) {
+  uint8_t index = pole(c);
+  for(int sloupec = 0; sloupec <8;sloupec++){
+    uint8_t data = 0
+    for(int radek = 0; radek < 8; radek++) {
+      if (font8x8_basic[(uint8_t)c][radek] & (1 << (7-sloupec))) {
+        data |= (1 << (7 - row));
+      }
+    }
+    if(start + sloupec >=0 && start + sloupec < pocet_sloupcu) {
+      display[start +sloupec] = data;
+    }
+  }
+}
+
+void vypis(const char *znaky; int start; int mezera) {
+  int pozice = start;
+  int i = 0;
+  while(znaky[i]!='\0') {
+    vykresli(znaky[i], pozice);
+    pozice += 8 + mezera; //Velikost znaku 8 a mezera
+  }
+}
+
 int main() {
-  char text [30];
+  char text [50];
   bool cas = true; //datum/čas přehoz
   int pocitadlo = 0;
   setup();
@@ -162,7 +202,10 @@ int main() {
   while(1) {
     while(cas == true) {
       update_cas();
-
+      smaz();
+      sprintf(text, "02d%:02d%:02d%", hodiny, minuty, sekundy);
+      vypis(text, 3, 1);
+      obnova();
       _delay_ms(1000);
       pocitadlo++;
       if(pocitadlo == 10) {
@@ -173,7 +216,9 @@ int main() {
     while(cas == false) {
       update_cas();
       smaz();
-
+      sprintf(text ,"%02d/%02d/%04d/%02d", den, mesic, rok, denvtydnu)
+      vypis(text, 3, 1);
+      obnova();
       _delay_ms(1000);
       pocitadlo++;
       if(pocitadlo == 10) {
