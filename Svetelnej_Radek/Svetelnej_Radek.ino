@@ -180,7 +180,7 @@ void vykresli(char c, int start) {
 
 void vypis(const char *znaky, int start, int mezera) {
   int pozice = start;
-  int i = 0;
+  int i = 0; //aktuální znak
   while(znaky[i]!='\0') {
     vykresli(znaky[i], pozice); //vykreslení od startovní pozice
     pozice += 8 + mezera; //Velikost znaku 8 a mezera
@@ -190,7 +190,7 @@ void vypis(const char *znaky, int start, int mezera) {
 
 int main() {
   char text [100]; //paměť pro světelnej řádek
-  bool cas = false; //datum/čas přehoz
+  bool cas = true; //datum/čas přehoz
   int pocitadlo = 0; //10 sekund a přehodí se
   setup();
   setup_spi();  
