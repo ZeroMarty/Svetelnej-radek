@@ -8,8 +8,9 @@
 #define CLK 0x04 // PORTB2
 #define SPI_DELAY 50
 #define pocet 12
-#define pocet_sloupcu (pocet * 8)
-uint8_t hodiny = 14;
+#define pocet_sloupcu 96
+
+;uint8_t hodiny = 14;
 uint8_t minuty = 25;
 uint8_t sekundy = 30;
 uint8_t den = 21;
@@ -155,7 +156,7 @@ void update_cas() {
 
 void smaz() {
   for(int i = 0; i < pocet_sloupcu; i++) {
-    obrazovka[i] = 0;
+    display[i] = 0;
   }
 }
 
@@ -163,19 +164,19 @@ void obnova() {
   for (uint8_t sloupec = 1; sloupec <= 8; sloupec++) { //kvůli noop začínám v 1
     spi_start();
     for(int i = 11; i >= 0; i--) { //odzadu
-      spi_pis(sloupec, display[(i*8) + (sloupec-1)])
+      spi_pis(sloupec, display[(i*8) + (sloupec-1)]);
     }
     spi_stop();
   }
 }
 
-void vykresli(char c; int start) {
+void vykresli(char c, int start) {
   uint8_t index = pole(c);
   for(int sloupec = 0; sloupec <8;sloupec++){
-    uint8_t data = 0
+    uint8_t data = 0;
     for(int radek = 0; radek < 8; radek++) {
       if (font8x8_basic[(uint8_t)c][radek] & (1 << (7-sloupec))) {
-        data |= (1 << (7 - row));
+        data |= (1 << (7 - radek));
       }
     }
     if(start + sloupec >=0 && start + sloupec < pocet_sloupcu) {
@@ -184,7 +185,7 @@ void vykresli(char c; int start) {
   }
 }
 
-void vypis(const char *znaky; int start; int mezera) {
+void vypis(const char *znaky, int start, int mezera) {
   int pozice = start;
   int i = 0;
   while(znaky[i]!='\0') {
@@ -204,7 +205,7 @@ int main() {
       update_cas();
       smaz();
       sprintf(text, "02d%:02d%:02d%", hodiny, minuty, sekundy);
-      vypis(text, 3, 1);
+      vypis(text, 0, 2);
       obnova();
       _delay_ms(1000);
       pocitadlo++;
@@ -216,8 +217,8 @@ int main() {
     while(cas == false) {
       update_cas();
       smaz();
-      sprintf(text ,"%02d/%02d/%04d/%02d", den, mesic, rok, denvtydnu)
-      vypis(text, 3, 1);
+      sprintf(text ,"%02d/%02d/%04d/%02d", den, mesic, rok, denvtydnu);
+      vypis(text, 0, 2);
       obnova();
       _delay_ms(1000);
       pocitadlo++;
