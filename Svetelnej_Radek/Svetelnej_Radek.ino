@@ -10,6 +10,7 @@
 #define pocet 12
 #define pocet_sloupcu 96
 
+
 uint8_t hodiny = 14;
 uint8_t minuty = 25;
 uint8_t sekundy = 30;
@@ -34,11 +35,11 @@ void spi_stop() {
   _delay_us(SPI_DELAY);
 }
 
-//vada bude někde ve psaní
+//vada bude někde v převodu
 
 void pis_vsem(uint8_t addr, uint8_t data) {
-  spi_start();
-  for (int i = 0; i < pocet; i++) { //pošle na každý registr
+  spi_start(); 
+  for(int i = 0; i < pocet; i++) {
     spi_pis(addr, data);
   }
   spi_stop();
@@ -49,7 +50,7 @@ uint8_t pole (char c) { //překlad znaků na index v poli v fontu
   if(c == ':') return 10;
   if(c=='.') return 11;
   if(c=='-') return 12;
-  return 13;
+  return 13; //mezera pokud to není ani jeden znak
 }
 
 void spi_pis(uint8_t addr, uint8_t data) {
@@ -177,7 +178,7 @@ void vykresli(char c, int start) {
   for(int sloupec = 0; sloupec <8;sloupec++){
     uint8_t data = 0;
     for(int radek = 0; radek < 8; radek++) {
-      if (font8x8_basic[(uint8_t)c][radek] & (1 << (7-sloupec))) {
+      if (font8x8_basic[(uint8_t)index][radek] & (1 << (7-sloupec))) { //index sloupce je získaná hodnota z fontu (funkce pole), řádek je potřebný rozsvicovaný řádek
         data |= (1 << (7 - radek));
       }
     }
@@ -198,9 +199,8 @@ void vypis(const char *znaky, int start, int mezera) {
 }
 
 int main() {
-  
-  char text [50];
-  bool cas = true; //datum/čas přehoz
+  char text [100];
+  bool cas = false; //datum/čas přehoz
   int pocitadlo = 0;
   setup();
   setup_spi();  
@@ -208,8 +208,8 @@ int main() {
     while(cas == true) {
       update_cas();
       smaz();
-      sprintf(text, "02d%:02d%:02d%", hodiny, minuty, sekundy);
-      vypis(text, 1, 2);
+      sprintf(text, "%01d%01d:%01d%01d:%01d%01d", sekundy%10 ,sekundy/10, minuty%10, minuty/10, hodiny%10, hodiny/10 );
+      vypis(text, 8, 0);
       obnova();
       _delay_ms(1000);
       pocitadlo++;
@@ -221,8 +221,8 @@ int main() {
     while(cas == false) {
       update_cas();
       smaz();
-      sprintf(text ,"02d%/02d%/04d%/01d%", den, mesic, rok, denvtydnu);
-      vypis(text, 1, 2);
+      sprintf(text ,"%02d-%02d%-04d%", den, mesic, rok);
+      vypis(text, 8, 0);
       obnova();
       _delay_ms(1000);
       pocitadlo++;
