@@ -34,6 +34,8 @@ void spi_stop() {
   _delay_us(SPI_DELAY);
 }
 
+//vada bude někde ve psaní
+
 void pis_vsem(uint8_t addr, uint8_t data) {
   spi_start();
   for (int i = 0; i < pocet; i++) { //pošle na každý registr
@@ -191,10 +193,12 @@ void vypis(const char *znaky, int start, int mezera) {
   while(znaky[i]!='\0') {
     vykresli(znaky[i], pozice);
     pozice += 8 + mezera; //Velikost znaku 8 a mezera
+    i++;
   }
 }
 
 int main() {
+  
   char text [50];
   bool cas = true; //datum/čas přehoz
   int pocitadlo = 0;
@@ -205,7 +209,7 @@ int main() {
       update_cas();
       smaz();
       sprintf(text, "02d%:02d%:02d%", hodiny, minuty, sekundy);
-      vypis(text, 0, 2);
+      vypis(text, 1, 2);
       obnova();
       _delay_ms(1000);
       pocitadlo++;
@@ -217,8 +221,8 @@ int main() {
     while(cas == false) {
       update_cas();
       smaz();
-      sprintf(text ,"%02d/%02d/%04d/%02d", den, mesic, rok, denvtydnu);
-      vypis(text, 0, 2);
+      sprintf(text ,"02d%/02d%/04d%/01d%", den, mesic, rok, denvtydnu);
+      vypis(text, 1, 2);
       obnova();
       _delay_ms(1000);
       pocitadlo++;
