@@ -199,9 +199,9 @@ void vypis(const char *znaky, int start, int mezera) {
 }
 
 int main() {
-  char text [100];
+  char text [100]; //paměť pro světelnej řádek
   bool cas = false; //datum/čas přehoz
-  int pocitadlo = 0;
+  int pocitadlo = 0; //10 sekund a přehodí se
   setup();
   setup_spi();  
   while(1) {
