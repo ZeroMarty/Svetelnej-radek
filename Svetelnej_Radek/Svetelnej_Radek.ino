@@ -51,7 +51,7 @@ uint8_t pole (char c) { //překlad znaků na index v poli v fontu
 
 void spi_pis(uint8_t addr, uint8_t data) {
   for(int i = 0; i < 8; i++) {
-    if((addr & 0x8000) == 0) {
+    if((addr & 0x80) == 0) {
       PORTB &= ~(DIN);
       _delay_us(SPI_DELAY);
     }
@@ -66,7 +66,7 @@ void spi_pis(uint8_t addr, uint8_t data) {
     addr = addr << 1;
   }
   for(int i = 0; i < 8; i++) {
-    if((data & 0x8000) == 0) {
+    if((data & 0x80) == 0) {
       PORTB &= ~(DIN);
       _delay_us(SPI_DELAY);
     }
