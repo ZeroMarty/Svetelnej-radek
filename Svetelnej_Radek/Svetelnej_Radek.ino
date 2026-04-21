@@ -221,7 +221,7 @@ int main() {
     while(cas == false) {
       update_cas();
       smaz();
-      sprintf(text ,"%02d-%02d%-04d%", den, mesic, rok);
+      sprintf(text ,"%02d-%02d-%04d", den, mesic, rok);
       vypis(text, 8, 0);
       obnova();
       _delay_ms(1000);
