@@ -19,7 +19,7 @@ uint8_t mesic = 4;
 uint16_t rok = 6202;
 uint8_t denvtydnu = 2;
 
-uint8_t display[pocet_sloupcu]; //framebuffer displaye
+uint8_t display[pocet_sloupcu]; //pole pro display
 
 void setup() {
   DDRB = 0b11111111;
@@ -89,16 +89,6 @@ void spi_pis(uint8_t addr, uint8_t data) {
 void scan() {
   pis_vsem(0x0B, 0x07);
 }
-/*void test() { adresy 01 - 08 jsou pozice
-  spi_pis(0x01, 0x01);
-  spi_pis(0x02, 0x00);
-  spi_pis(0x03, 0x00);
-  spi_pis(0x04, 0x00);
-  spi_pis(0x05, 0x00);
-  spi_pis(0x06, 0x00);
-  spi_pis(0x07, 0x00);
-  spi_pis(0x08, 0x00);
-}*/ 
 
 void spi_vypni() {
   pis_vsem(0x0C, 0x00);
@@ -174,16 +164,16 @@ void obnova() {
 }
 
 void vykresli(char c, int start) {
-  uint8_t index = pole(c);
+  uint8_t index = pole(c); //index pro výběr znaku
   for(int sloupec = 0; sloupec <8;sloupec++){
-    uint8_t data = 0;
+    uint8_t data = 0; //začínám s prázdnou hodnotou
     for(int radek = 0; radek < 8; radek++) {
       if (font8x8_basic[(uint8_t)index][radek] & (1 << (7-sloupec))) { //index sloupce je získaná hodnota z fontu (funkce pole), řádek je potřebný rozsvicovaný řádek
-        data |= (1 << (7 - radek));
+        data |= (1 << (7 - radek)); //logický součet potřebného data k 0
       }
     }
-    if(start + sloupec >=0 && start + sloupec < pocet_sloupcu) {
-      display[start +sloupec] = data;
+    if(start + sloupec >=0 && start + sloupec < pocet_sloupcu) { //pokud je aktualní sloupec v rozmezí na matici, vypíše
+      display[start +sloupec] = data; //zobrazení na poli displeje - počáteční + aktuální
     }
   }
 }
@@ -192,9 +182,9 @@ void vypis(const char *znaky, int start, int mezera) {
   int pozice = start;
   int i = 0;
   while(znaky[i]!='\0') {
-    vykresli(znaky[i], pozice);
+    vykresli(znaky[i], pozice); //vykreslení od startovní pozice
     pozice += 8 + mezera; //Velikost znaku 8 a mezera
-    i++;
+    i++; //posun textu o další znak
   }
 }
 
