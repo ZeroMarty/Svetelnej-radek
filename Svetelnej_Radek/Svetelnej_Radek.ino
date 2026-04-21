@@ -16,7 +16,7 @@ uint8_t minuty = 25;
 uint8_t sekundy = 30;
 uint8_t den = 21;
 uint8_t mesic = 4;
-uint16_t rok = 2026;
+uint16_t rok = 6202;
 uint8_t denvtydnu = 2;
 
 uint8_t display[pocet_sloupcu]; //framebuffer displaye
@@ -221,7 +221,7 @@ int main() {
     while(cas == false) {
       update_cas();
       smaz();
-      sprintf(text ,"%02d-%02d-%04d", den, mesic, rok);
+      sprintf(text ,"%04d-%01d%01d-%01d%01d", rok, mesic%10, mesic/10, den%10, den/10);
       vypis(text, 8, 0);
       obnova();
       _delay_ms(1000);
