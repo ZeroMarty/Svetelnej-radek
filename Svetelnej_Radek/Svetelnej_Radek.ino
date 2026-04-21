@@ -10,7 +10,7 @@
 #define pocet 12
 #define pocet_sloupcu 96
 
-;uint8_t hodiny = 14;
+uint8_t hodiny = 14;
 uint8_t minuty = 25;
 uint8_t sekundy = 30;
 uint8_t den = 21;
